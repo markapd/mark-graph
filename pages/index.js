@@ -1,18 +1,16 @@
 import { Input, Box,FormControl,FormLabel,Container,HStack,Button,
 	List,Text,ListItem,	Spinner,	Select,	Spacer,	Divider,	useToast,
-	AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
+	AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader,
+  AlertDialogContent, AlertDialogOverlay,
 } from '@chakra-ui/react'
+
 // Imports
 import { QUERY, CREATE_PRODUCT, REMOVE_PRODUCT, UPDATE_PRODUCT } from '../query/schema'
 import { useMutation, useQuery} from "@apollo/client";
 import { useState, useRef} from 'react';
 import { CardInfo } from '../components/CardInfo';
 import { FormInput } from '../components/FormInput';
+
 //Select limit
 const selectOptions = [
 	{	value:'',	label:"Limit Items"	},
@@ -22,11 +20,8 @@ const selectOptions = [
 	{	value:20,	label:"20"},
 ]
 export default function Home({options = selectOptions}) {
-	// const [isOpen, setIsOpen] = useState(false)
-  // const onClose = () => setIsOpen(false)
-  // const cancelRef = useRef()
 	const toast = useToast()
-	const [handleStatus, setHandleStatus] = useState(true)
+	const [ handleStatus, setHandleStatus ] = useState(true)
 	const [ limit, setLimit] = useState(0)
 	const [ sorts, setsSort] = useState("NAME_ASC")
 	const [	myId, setMyId] = useState('')
@@ -36,22 +31,13 @@ export default function Home({options = selectOptions}) {
 	const [	updateProduct] = useMutation(UPDATE_PRODUCT)
  	const { loading, data } = useQuery(QUERY,{variables: {limit: parseInt(limit), sort:sorts}})
 
- if(loading){
-		return <Spinner
-		thickness='4px'
-		position="absolute"
-		top="300px"
-		left="700px"
-		speed='0.65s'
-		emptyColor='gray.200'
-		color='blue.500'
-		size='xl'
-	/>
- }
- const newData = data.viewer.productList
+ 
+//  const newData = 
+
+ // ito yung create ko
 	const handleSubmit = (e) => {
-		const uuid = Math.floor(Math.random() * 3100)
 		e.preventDefault()
+		const uuid = Math.floor(Math.random() * 3100)
 		const dataAdded =	createProduct({variables: 
 				{	createProductRecord2: {
 						productID: uuid,
@@ -151,9 +137,10 @@ export default function Home({options = selectOptions}) {
 				</HStack>
 			</Container>
 			<Container maxW="container.3xl">
+
 				<List display="flex" flexWrap="wrap">
-					{
-						newData.map((e,i)=>
+					{ loading?<Spinner />: 
+						data.viewer.productList.map((e,i)=>
 							<CardInfo key={i} {...e} handleDelete={handleDelete} handleEdit={handleEdit} myInfo={e}  />
 						)
 					}
